@@ -5,7 +5,7 @@
 
 const CONFIG = {
   // Base URL of the FastAPI backend (no trailing slash)
-  API_BASE_URL:"http://localhost:8000",
+  API_BASE_URL:" https://kanya-jewelary.onrender.com",
 
   SHOP_NAME: "Kanya Jewellers",
   SHOP_PHONE_DISPLAY: "+91 9370432627",
