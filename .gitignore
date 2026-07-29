@@ -1,0 +1,16 @@
+# Python
+__pycache__/
+*.pyc
+venv/
+.venv/
+
+# Env
+.env
+
+# Local uploads (dev fallback storage)
+backend/app/static/uploads/*
+!backend/app/static/uploads/.gitkeep
+
+# OS
+.DS_Store
+Thumbs.db

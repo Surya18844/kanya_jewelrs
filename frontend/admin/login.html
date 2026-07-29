@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Admin Login | Kanya Jewelers</title>
+<meta name="robots" content="noindex, nofollow" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/style.css" />
+<link rel="stylesheet" href="assets/admin.css" />
+</head>
+<body class="admin-login-body">
+  <div class="admin-login-card">
+    <div class="admin-login-brand">
+      <span class="brand-name gold-text" style="font-family:var(--font-heading);font-size:28px;">Kanya Jewelers</span>
+      <p>Admin Dashboard</p>
+    </div>
+    <form id="loginForm">
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" id="username" required autocomplete="username" />
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" required autocomplete="current-password" />
+      </div>
+      <button type="submit" class="btn btn-gold" style="width:100%;">Login</button>
+      <p class="form-msg" id="loginMsg"></p>
+    </form>
+    <a href="../index.html" class="back-link">&larr; Back to website</a>
+  </div>
+
+<script src="../assets/js/config.js"></script>
+<script src="assets/admin-auth.js"></script>
+<script>
+  document.getElementById("loginForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const msgEl = document.getElementById("loginMsg");
+    msgEl.className = "form-msg";
+    const username = document.getElementById("username").value.trim();
+    const password = document.getElementById("password").value;
+    const btn = e.target.querySelector('button[type="submit"]');
+    btn.disabled = true;
+    btn.textContent = "Logging in…";
+    try {
+      const res = await fetch(`${CONFIG.API_BASE_URL}/api/admin/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.detail || "Login failed.");
+      localStorage.setItem("kanya_admin_token", data.access_token);
+      window.location.href = "dashboard.html";
+    } catch (err) {
+      msgEl.classList.add("error");
+      msgEl.textContent = err.message;
+    } finally {
+      btn.disabled = false;
+      btn.textContent = "Login";
+    }
+  });
+</script>
+</body>
+</html>

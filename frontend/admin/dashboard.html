@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Admin Dashboard | Kanya Jewelers</title>
+<meta name="robots" content="noindex, nofollow" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/style.css" />
+<link rel="stylesheet" href="assets/admin.css" />
+</head>
+<body class="admin-body">
+
+<div class="admin-topbar">
+  <span class="brand-name">Kanya Jewelers — Admin</span>
+  <div class="admin-user">
+    <span id="adminUsername">Admin</span>
+    <button class="logout-btn" onclick="adminLogout()">Logout</button>
+  </div>
+</div>
+
+<div class="admin-layout">
+  <aside class="admin-sidebar">
+    <button class="nav-btn active" data-panel="productsPanel">🛍️ Products</button>
+    <button class="nav-btn" data-panel="galleryPanel">🖼️ Gallery</button>
+    <button class="nav-btn" data-panel="ratesPanel">💰 Gold &amp; Silver Rates</button>
+    <button class="nav-btn" data-panel="enquiriesPanel">✉️ Enquiries</button>
+  </aside>
+
+  <main class="admin-main">
+
+    <!-- ===== Products Panel ===== -->
+    <section class="admin-panel active" id="productsPanel">
+      <div class="admin-panel-header">
+        <h2>Product Management</h2>
+        <button class="btn btn-gold" id="addProductBtn">+ Add New Product</button>
+      </div>
+      <div class="admin-card">
+        <table class="admin-table">
+          <thead>
+            <tr><th>Image</th><th>Name</th><th>Category</th><th>Status</th><th>Actions</th></tr>
+          </thead>
+          <tbody id="productsTableBody">
+            <tr><td colspan="5">Loading products…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ===== Gallery Panel ===== -->
+    <section class="admin-panel" id="galleryPanel">
+      <div class="admin-panel-header">
+        <h2>Gallery Management</h2>
+        <label class="btn btn-gold" style="cursor:pointer;">
+          + Upload Image
+          <input type="file" id="galleryUploadInput" accept="image/jpeg,image/png,image/webp" hidden />
+        </label>
+      </div>
+      <div class="admin-card">
+        <div class="gallery-admin-grid" id="galleryAdminGrid">Loading gallery…</div>
+      </div>
+    </section>
+
+    <!-- ===== Rates Panel ===== -->
+    <section class="admin-panel" id="ratesPanel">
+      <div class="admin-panel-header"><h2>Gold &amp; Silver Rate Management</h2></div>
+      <div class="admin-card">
+        <h3 style="margin-bottom:16px;">🥇 Gold Rate</h3>
+        <form id="goldRateForm" class="rate-form-grid">
+          <div class="form-group">
+            <label>Rate per gram (22K)</label>
+            <input type="number" step="0.01" min="0" id="gold22Input" required />
+          </div>
+          <div class="form-group">
+            <label>Rate per gram (24K)</label>
+            <input type="number" step="0.01" min="0" id="gold24Input" required />
+          </div>
+          <div style="align-self:flex-end;">
+            <button type="submit" class="btn btn-gold">Save Gold Rate</button>
+          </div>
+        </form>
+      </div>
+      <div class="admin-card">
+        <h3 style="margin-bottom:16px;">🥈 Silver Rate</h3>
+        <form id="silverRateForm" class="rate-form-grid">
+          <div class="form-group">
+            <label>Rate per gram</label>
+            <input type="number" step="0.01" min="0" id="silverGramInput" required />
+          </div>
+          <div class="form-group">
+            <label>Rate per kg</label>
+            <input type="number" step="0.01" min="0" id="silverKgInput" required />
+          </div>
+          <div style="align-self:flex-end;">
+            <button type="submit" class="btn btn-gold">Save Silver Rate</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- ===== Enquiries Panel ===== -->
+    <section class="admin-panel" id="enquiriesPanel">
+      <div class="admin-panel-header"><h2>Customer Enquiries</h2></div>
+      <div class="admin-card">
+        <table class="admin-table">
+          <thead>
+            <tr><th>Name</th><th>Phone</th><th>Email</th><th>Message</th><th>Received</th><th>Actions</th></tr>
+          </thead>
+          <tbody id="enquiriesTableBody">
+            <tr><td colspan="6">Loading enquiries…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- ===== Product Modal ===== -->
+<div class="modal-backdrop" id="productModalBackdrop">
+  <div class="modal">
+    <span class="modal-close" id="productModalClose">&times;</span>
+    <h3 id="productModalTitle">Add New Product</h3>
+    <form id="productForm">
+      <input type="hidden" id="productId" />
+      <div class="form-group">
+        <label>Product Name</label>
+        <input type="text" id="productName" required minlength="2" />
+      </div>
+      <div class="form-group">
+        <label>Category</label>
+        <select id="productCategory" required></select>
+      </div>
+      <div class="form-group">
+        <label>Short Description</label>
+        <textarea id="productDescription" rows="3"></textarea>
+      </div>
+      <div class="form-group">
+        <label>Product Image</label>
+        <input type="file" id="productImageFile" accept="image/jpeg,image/png,image/webp" />
+        <input type="hidden" id="productImageUrl" />
+        <img id="productImagePreview" style="margin-top:10px;max-height:120px;border-radius:6px;display:none;" />
+      </div>
+      <div class="form-group">
+        <label><input type="checkbox" id="productActive" checked style="width:auto;margin-right:8px;" />Active (visible on website)</label>
+      </div>
+      <button type="submit" class="btn btn-gold" style="width:100%;">Save Product</button>
+      <p class="form-msg" id="productFormMsg"></p>
+    </form>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="../assets/js/config.js"></script>
+<script src="assets/admin-auth.js"></script>
+<script src="assets/admin-dashboard.js"></script>
+</body>
+</html>
